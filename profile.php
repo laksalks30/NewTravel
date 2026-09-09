@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once 'config_security.php';
 requireLogin();
 include 'koneksi.php';
@@ -420,15 +420,15 @@ $bookings->data_seek(0);
 
                         <?php if ($totalBooking > 0): ?>
                             <?php while ($booking = $bookings->fetch_assoc()):
-                                $status = strtolower($booking['status']);
+                                $status = strtolower($booking['status'] ?? 'pending');
                                 $scls = match($status) {
-                                    'confirmed' => 's-confirmed',
+                                    'accepted', 'confirmed' => 's-confirmed',
                                     'rejected'  => 's-rejected',
                                     'completed' => 's-completed',
                                     default     => 's-pending'
                                 };
                                 $label = match($status) {
-                                    'confirmed' => '✓ Dikonfirmasi',
+                                    'accepted', 'confirmed' => '✓ Diterima',
                                     'rejected'  => '✗ Ditolak',
                                     'completed' => '✈ Selesai',
                                     default     => '⏳ Menunggu'

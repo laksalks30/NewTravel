@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include "koneksi.php";
 session_start();
 
@@ -10,7 +10,7 @@ if (!isset($_SESSION['id'])) {
 $id_akun = $_SESSION['id'];
 $query = mysqli_query($conn, "
     SELECT p.id_pemesanan, p.asal, p.tanggal_berangkat, p.tanggal_pulang,
-           p.jumlah_orang, d.nama_destinasi, d.kota_destinasi, p.status
+           p.jumlah_orang, d.nama_destinasi, d.kota_destinasi, d.harga_destinasi, p.status
     FROM pemesanan p
     JOIN destinasi d ON p.id_destinasi = d.id_destinasi
     WHERE p.id_akun = '$id_akun'
@@ -164,6 +164,24 @@ $user = mysqli_fetch_assoc($userQ);
             padding: 5px 14px;
             border-radius: 20px;
         }
+
+        @media print {
+            body * { visibility: hidden; }
+            .modal.show, .modal.show .modal-content, .modal.show .modal-content * {
+                visibility: visible;
+            }
+            .modal.show {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            .modal-footer, .btn-close { display: none !important; }
+        }
     </style>
 </head>
 <body>
@@ -226,13 +244,27 @@ $user = mysqli_fetch_assoc($userQ);
                                     <th>Berangkat</th>
                                     <th>Pulang</th>
                                     <th>Status</th>
+                                    <th class="text-center">Aksi / Dokumen</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $no = 1; while ($row = mysqli_fetch_assoc($query)): ?>
+                                <?php 
+                                $no = 1;
+                                $acceptedBookings = [];
+                                while ($row = mysqli_fetch_assoc($query)): 
+                                    $status = strtolower($row['status'] ?? 'pending');
+                                    $cls = match($status) {
+                                        'accepted', 'confirmed' => 'status-confirmed',
+                                        'rejected', 'cancelled' => 'status-cancelled',
+                                        default => 'status-pending'
+                                    };
+                                    if ($status === 'accepted' || $status === 'confirmed') {
+                                        $acceptedBookings[] = $row;
+                                    }
+                                ?>
                                     <tr>
                                         <td style="color:#aaa;font-size:12px;"><?= $no++ ?></td>
-                                        <td><span class="id-badge">#<?= $row['id_pemesanan'] ?></span></td>
+                                        <td><span class="id-badge">#TRV-<?= $row['id_pemesanan'] ?></span></td>
                                         <td>
                                             <div class="dest-name"><?= htmlspecialchars($row['nama_destinasi']) ?></div>
                                             <?php if (!empty($row['kota_destinasi'])): ?>
@@ -252,15 +284,20 @@ $user = mysqli_fetch_assoc($userQ);
                                             </div>
                                         </td>
                                         <td>
-                                            <?php
-                                            $status = strtolower($row['status']);
-                                            $cls = match($status) {
-                                                'confirmed' => 'status-confirmed',
-                                                'cancelled' => 'status-cancelled',
-                                                default => 'status-pending'
-                                            };
-                                            ?>
                                             <span class="status-badge <?= $cls ?>"><?= ucfirst(htmlspecialchars($row['status'])) ?></span>
+                                        </td>
+                                        <td class="text-center">
+                                            <?php if ($status === 'accepted' || $status === 'confirmed'): ?>
+                                                <button type="button" class="btn btn-sm btn-success text-white fw-bold px-3 py-1" data-bs-toggle="modal" data-bs-target="#modalTiket<?= $row['id_pemesanan'] ?>" style="border-radius: 20px; font-size: 12px; background: #10b981; border: none; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
+                                                    <i class="fas fa-ticket-alt me-1"></i> Lihat E-Tiket
+                                                </button>
+                                            <?php elseif ($status === 'rejected' || $status === 'cancelled'): ?>
+                                                <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Travel,%20booking%20saya%20nomor%20%23TRV-<?= $row['id_pemesanan'] ?>%20statusnya%20ditolak.%20Boleh%20tanya%20alasannya?" target="_blank" class="btn btn-sm btn-outline-danger" style="border-radius: 20px; font-size: 11px;">
+                                                    <i class="fab fa-whatsapp me-1"></i> Tanya CS
+                                                </a>
+                                            <?php else: ?>
+                                                <span class="text-muted" style="font-size: 12px;"><i class="fas fa-clock me-1 text-warning"></i>Menunggu ACC</span>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -268,6 +305,110 @@ $user = mysqli_fetch_assoc($userQ);
                         </table>
                     </div>
                 </div>
+
+                <!-- Modal E-Tiket untuk Pesanan yang sudah Di-ACC -->
+                <?php foreach ($acceptedBookings as $b): 
+                    $totalHarga = (int)$b['harga_destinasi'] * (int)$b['jumlah_orang'];
+                ?>
+                    <div class="modal fade" id="modalTiket<?= $b['id_pemesanan'] ?>" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content" style="border-radius: 20px; overflow: hidden; border: none; box-shadow: 0 15px 50px rgba(0,0,0,0.25);">
+                                <!-- Ticket Header -->
+                                <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 24px 28px; position: relative;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span style="font-weight: 800; font-size: 22px; letter-spacing: -0.5px;"><span style="color:#ffa500;">T</span>ravel E-Ticket</span>
+                                            <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px;">Voucher Perjalanan & Bukti Booking Resmi</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-success px-3 py-2" style="border-radius: 20px; font-size: 12px; font-weight: 600;">
+                                                <i class="fas fa-check-circle me-1"></i> BOOKING ACCEPTED
+                                            </span>
+                                            <div style="font-size: 11.5px; color: rgba(255,255,255,0.7); margin-top: 4px;">Kode: <strong>#TRV-<?= str_pad($b['id_pemesanan'], 5, '0', STR_PAD_LEFT) ?></strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ticket Body -->
+                                <div class="modal-body p-4" style="background: #ffffff;">
+                                    <div class="mb-4 pb-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                        <div>
+                                            <h4 class="fw-bold mb-1" style="color: #1a1a2e;"><?= htmlspecialchars($b['nama_destinasi']) ?></h4>
+                                            <span class="text-muted" style="font-size: 13.5px;"><i class="fas fa-map-marker-alt text-warning me-1"></i><?= htmlspecialchars($b['kota_destinasi']) ?></span>
+                                        </div>
+                                        <div class="text-md-end">
+                                            <div class="text-muted" style="font-size: 11.5px;">Total Biaya Paket:</div>
+                                            <div class="fw-bold text-success" style="font-size: 18px;">Rp <?= number_format($totalHarga, 0, ',', '.') ?></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-sm-6 col-md-4">
+                                            <small class="text-muted d-block" style="font-size: 11px;">Nama Pemesan</small>
+                                            <span class="fw-semibold text-dark" style="font-size: 13.5px;"><?= htmlspecialchars($user['nama_lengkap']) ?></span>
+                                        </div>
+                                        <div class="col-sm-6 col-md-4">
+                                            <small class="text-muted d-block" style="font-size: 11px;">Jumlah Peserta</small>
+                                            <span class="fw-semibold text-dark" style="font-size: 13.5px;"><i class="fas fa-users text-warning me-1"></i><?= $b['jumlah_orang'] ?> Orang</span>
+                                        </div>
+                                        <div class="col-sm-6 col-md-4">
+                                            <small class="text-muted d-block" style="font-size: 11px;">Kota Asal Keberangkatan</small>
+                                            <span class="fw-semibold text-dark" style="font-size: 13.5px;"><i class="fas fa-location-arrow text-primary me-1"></i><?= htmlspecialchars($b['asal']) ?></span>
+                                        </div>
+                                        <div class="col-sm-6 col-md-6">
+                                            <div class="p-2 bg-light rounded-3">
+                                                <small class="text-muted d-block" style="font-size: 11px;"><i class="far fa-calendar-alt text-primary me-1"></i>Tanggal Berangkat</small>
+                                                <span class="fw-bold text-dark" style="font-size: 13.5px;"><?= date('l, d F Y', strtotime($b['tanggal_berangkat'])) ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-md-6">
+                                            <div class="p-2 bg-light rounded-3">
+                                                <small class="text-muted d-block" style="font-size: 11px;"><i class="far fa-calendar-check text-success me-1"></i>Tanggal Pulang</small>
+                                                <span class="fw-bold text-dark" style="font-size: 13.5px;"><?= date('l, d F Y', strtotime($b['tanggal_pulang'])) ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Next Steps / Panduan Keberangkatan -->
+                                    <div class="p-3 mb-3" style="background: #f0fdf4; border-radius: 12px; border-left: 4px solid #10b981;">
+                                        <div class="fw-bold text-dark mb-1" style="font-size: 13px;">
+                                            <i class="fas fa-compass text-success me-1"></i> Langkah Selanjutnya Setelah Booking di-ACC:
+                                        </div>
+                                        <ul class="ps-3 mb-0 text-secondary" style="font-size: 12px; line-height: 1.7;">
+                                            <li><strong>Simpan / Cetak E-Tiket:</strong> Klik tombol <em>"Cetak E-Tiket"</em> untuk menyimpan file PDF atau mencetaknya sebagai bukti verifikasi.</li>
+                                            <li><strong>Konfirmasi Titik Kumpul (Meeting Point):</strong> Admin/Tour Guide akan menghubungi Anda via WhatsApp H-1 sebelum keberangkatan untuk share lokasi jemput.</li>
+                                            <li><strong>Pelunasan & Koordinasi:</strong> Pembayaran/pelunasan dapat dikonfirmasi langsung dengan CS Travel melalui WhatsApp.</li>
+                                            <li><strong>Hari Keberangkatan:</strong> Cukup tunjukkan QR Code atau ID Booking ini kepada petugas/driver di meeting point.</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="row align-items-center py-2 bg-light rounded-3 px-3">
+                                        <div class="col-auto">
+                                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=TRAVEL-BOOKING-<?= $b['id_pemesanan'] ?>-<?= urlencode($b['nama_destinasi']) ?>" alt="QR Code" style="width: 80px; height: 80px; border-radius: 8px; border: 1px solid #e2e8f0; background: white; padding: 3px;">
+                                        </div>
+                                        <div class="col">
+                                            <div class="fw-bold text-dark" style="font-size: 12.5px;">E-Voucher QR Verifikasi</div>
+                                            <p class="text-muted mb-0" style="font-size: 11.5px;">Tunjukkan QR Code ini pada petugas penjemputan saat hari H keberangkatan tur.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ticket Footer -->
+                                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between p-3">
+                                    <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal" style="border-radius: 20px;">Tutup</button>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-warning text-white btn-sm px-3 fw-bold" onclick="window.print()" style="border-radius: 20px; background: #ffa500; border: none; box-shadow: 0 4px 12px rgba(255,165,0,0.3);">
+                                            <i class="fas fa-print me-1"></i> Cetak E-Tiket (PDF)
+                                        </button>
+                                        <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Travel,%20pesanan%20saya%20%23TRV-<?= $b['id_pemesanan'] ?>%20untuk%20destinasi%20<?= urlencode($b['nama_destinasi']) ?>%20sudah%20di-ACC.%20Boleh%20minta%20info%20koordinasi%20titik%20kumpul%20dan%20pembayaran?" target="_blank" class="btn btn-success btn-sm px-3 fw-bold" style="border-radius: 20px; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
+                                            <i class="fab fa-whatsapp me-1"></i> Chat CS WhatsApp
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             <?php else: ?>
                 <div class="booking-card">
                     <div class="empty-state">
