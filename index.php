@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include "koneksi.php";
 include "config_security.php";
 include "auto_login.php";
@@ -226,8 +226,8 @@ if (!isset($_SESSION['id'])) {
       </div>
 
       <div class="text-center mt-5">
-        <a href="daftarDestinasi.php" class="btn-book" style="padding:14px 40px;font-size:15px;border-radius:50px;">
-          <i class="fas fa-th-large me-2"></i>Lihat Semua Destinasi
+        <a href="daftarDestinasi.php" class="btn-view-all">
+          <i class="fas fa-compass me-2 btn-icon-main"></i> Lihat Semua Destinasi <i class="fas fa-arrow-right ms-2 btn-icon-arrow"></i>
         </a>
       </div>
     </div>
