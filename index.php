@@ -325,13 +325,13 @@ if (!isset($_SESSION['id'])) {
         </div>
         <div class="col-md-4">
           <div class="gallery-item">
-            <img src="images/bali/gallary pura ulun.jpg" alt="Bali - Pura Ulun">
+            <img src="images/Bali/gallary pura ulun.jpg" alt="Bali - Pura Ulun">
             <div class="overlay"><span><i class="fas fa-map-marker-alt me-1"></i>Bali — Pura Ulun</span></div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="gallery-item">
-            <img src="images/bali/gallary.jpg" alt="Bali">
+            <img src="images/Bali/gallary.jpg" alt="Bali">
             <div class="overlay"><span><i class="fas fa-map-marker-alt me-1"></i>Bali</span></div>
           </div>
         </div>
