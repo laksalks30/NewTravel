@@ -21,6 +21,7 @@ if (!isset($_SESSION['id'])) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="navbar.js?v=2"></script>
 </head>
 <body>
 
@@ -28,7 +29,7 @@ if (!isset($_SESSION['id'])) {
   <nav class="navbar navbar-expand-lg" id="navbar">
     <div class="container">
       <a class="navbar-brand" href="index.php" id="logo"><span>T</span>ravel</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+      <button class="navbar-toggler" type="button" onclick="toggleNavMenu(event)" data-bs-toggle="collapse" data-bs-target="#mynavbar" aria-label="Toggle navigation">
         <span><i class="fa-solid fa-bars"></i></span>
       </button>
       <div class="collapse navbar-collapse" id="mynavbar">

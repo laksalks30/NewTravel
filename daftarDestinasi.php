@@ -4,7 +4,7 @@ include "config_security.php";
 
 $loggedIn = isset($_SESSION['id']);
 
-$query = "SELECT id_destinasi, nama_destinasi, deskripsi_destinasi, harga_destinasi, gambar_destinasi, kota_destinasi, kategori_destinasi FROM destinasi";
+$query = "SELECT id_destinasi, nama_destinasi, deskripsi_destinasi, harga_destinasi, kota_destinasi, kategori_destinasi FROM destinasi";
 $result = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
@@ -18,6 +18,7 @@ $result = mysqli_query($conn, $query);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=3">
+    <script src="navbar.js?v=2"></script>
     <style>
         .page-hero {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
@@ -183,7 +184,7 @@ $result = mysqli_query($conn, $query);
     <nav class="navbar navbar-expand-lg" id="navbar">
         <div class="container">
             <a class="navbar-brand" href="index.php" id="logo"><span>T</span>ravel</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+            <button class="navbar-toggler" type="button" onclick="toggleNavMenu(event)" data-bs-toggle="collapse" data-bs-target="#mynavbar" aria-label="Toggle navigation">
                 <span><i class="fa-solid fa-bars"></i></span>
             </button>
             <div class="collapse navbar-collapse" id="mynavbar">
@@ -233,13 +234,11 @@ $result = mysqli_query($conn, $query);
 
             <?php if ($total > 0): ?>
                 <div class="row g-4" id="destGrid">
-                    <?php while ($row = mysqli_fetch_assoc($result)):
-                        $imageSrc = 'data:image/jpeg;base64,' . base64_encode($row['gambar_destinasi']);
-                    ?>
+                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
                         <div class="col-md-4 dest-item">
                             <div class="dest-card">
                                 <div class="img-wrap">
-                                    <img src="<?= $imageSrc ?>" alt="<?= htmlspecialchars($row['nama_destinasi']) ?>">
+                                    <img src="get_image.php?id=<?= $row['id_destinasi'] ?>" alt="<?= htmlspecialchars($row['nama_destinasi']) ?>" loading="lazy">
                                     <?php if ($row['kategori_destinasi']): ?>
                                         <span class="tag"><?= htmlspecialchars($row['kategori_destinasi']) ?></span>
                                     <?php endif; ?>
