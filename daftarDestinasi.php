@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include "koneksi.php";
 include "config_security.php";
 
@@ -17,7 +17,7 @@ $result = mysqli_query($conn, $query);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3">
     <style>
         .page-hero {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
@@ -270,6 +270,7 @@ $result = mysqli_query($conn, $query);
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js?v=1"></script>
     <script>
         document.getElementById('searchInput').addEventListener('input', function() {
             const q = this.value.toLowerCase();

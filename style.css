@@ -71,13 +71,27 @@ body {
 }
 
 .navbar-toggler {
-    border: none;
-    padding: 4px 8px;
+    border: 1.5px solid rgba(255, 165, 0, 0.5) !important;
+    padding: 6px 10px !important;
+    border-radius: 10px !important;
+    background: #fff8e6 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    cursor: pointer;
+    transition: all 0.25s ease;
 }
 
-.navbar-toggler span {
-    color: var(--primary);
+.navbar-toggler:focus,
+.navbar-toggler:hover {
+    background: #ffe9b8 !important;
+    border-color: var(--primary) !important;
+}
+
+.navbar-toggler span,
+.navbar-toggler i {
+    color: var(--primary) !important;
     font-size: 20px;
+    pointer-events: none;
 }
 
 .navbar-nav {
@@ -127,6 +141,80 @@ body {
     border-color: #f44336;
     color: #f44336 !important;
     background: #fff5f5;
+}
+
+/* Mobile Navbar Dropdown Drawer */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 16px 18px;
+        margin-top: 12px;
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+        border: 1px solid var(--border);
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-collapse:not(.show) {
+        display: none !important;
+    }
+
+    .navbar-collapse.show {
+        display: block !important;
+        animation: fadeInNavbar 0.25s ease forwards;
+    }
+
+    @keyframes fadeInNavbar {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .navbar-nav {
+        margin-left: 0 !important;
+        gap: 6px;
+        padding: 0;
+    }
+
+    .navbar-nav .nav-item {
+        width: 100%;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 10px 14px !important;
+        border-radius: 10px;
+        font-size: 14.5px;
+        width: 100%;
+        color: var(--secondary);
+    }
+
+    .navbar-nav .nav-item .nav-link:hover,
+    .navbar-nav .nav-item .nav-link.active {
+        color: var(--primary) !important;
+        background: var(--primary-light) !important;
+    }
+
+    .navbar-nav.ms-auto {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+    }
+
+    .navbar-nav .nav-item .nav-link.btn-nav-login,
+    .navbar-nav .nav-item .nav-link.btn-nav-logout {
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+        padding: 10px !important;
+    }
 }
 
 /* ===========================

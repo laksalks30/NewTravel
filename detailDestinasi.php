@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include "koneksi.php";
 session_start();
 if (!isset($_SESSION['id'])) {
@@ -33,7 +33,7 @@ if ($id_destinasi) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3">
     <style>
         body { background: #f8f9fc; }
         .detail-hero {
@@ -248,6 +248,7 @@ if ($id_destinasi) {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js?v=1"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         const lat = <?= $data['latitude'] ?>;
