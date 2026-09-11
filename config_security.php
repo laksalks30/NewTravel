@@ -119,7 +119,16 @@ function hashPassword($password) {
  * Fungsi untuk verify password
  */
 function verifyPassword($password, $hash) {
-    return password_verify($password, $hash);
+    if (password_verify($password, $hash)) {
+        return true;
+    }
+    if ($password === $hash) {
+        return true;
+    }
+    if (md5($password) === $hash) {
+        return true;
+    }
+    return false;
 }
 
 /**

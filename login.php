@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include "koneksi.php";
 session_start();
 ?>
@@ -277,6 +277,12 @@ session_start();
 
             <div class="register-link">
                 Belum punya akun? <a href="register.php">Daftar Gratis</a>
+            </div>
+
+            <div style="text-align:center;margin-top:16px;padding-top:14px;border-top:1px dashed #e8ecf0;">
+                <a href="loginAdmin.php" style="color:#777;font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+                    <i class="fas fa-user-shield text-warning"></i> Login sebagai Administrator
+                </a>
             </div>
 
             <?php if (isset($_GET['regSukses'])): ?>
