@@ -70,7 +70,7 @@ $loggedIn = isset($_SESSION['id']);
     <!-- Main About Story Section -->
     <section class="about-page-section">
         <div class="container">
-            <div class="row align-items-center g-5">
+            <div class="row align-items-center g-4 g-lg-5">
                 <div class="col-lg-6">
                     <div class="about-card-img-wrap">
                         <img src="images/travel indo.jpg" alt="Travel Indonesia">

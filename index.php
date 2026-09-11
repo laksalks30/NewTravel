@@ -80,8 +80,8 @@ if (!isset($_SESSION['id'])) {
       <div class="badge-hero">✈ Explore Nusantara</div>
       <h5>Welcome To Indonesia</h5>
       <h1>Visit <span class="changecontent"></span></h1>
-      <p>Jelajahi keindahan Indonesia, tempat yang memikat dengan pesona budaya<br>dan alamnya yang tiada duanya.</p>
-      <div>
+      <p>Jelajahi keindahan Indonesia, tempat yang memikat dengan pesona budaya<br class="d-none d-md-inline"> dan alamnya yang tiada duanya.</p>
+      <div class="hero-btn-group">
         <a href="daftarDestinasi.php" class="btn-hero">
           <i class="fas fa-compass"></i> Jelajahi Destinasi
         </a>
@@ -342,7 +342,7 @@ if (!isset($_SESSION['id'])) {
   <!-- About Section -->
   <section class="about" id="about">
     <div class="container">
-      <div class="row align-items-center g-5">
+      <div class="row align-items-center g-4 g-lg-5">
         <div class="col-md-6">
           <div class="about-img">
             <img src="images/travel indo.jpg" alt="Travel Indonesia">
@@ -353,7 +353,7 @@ if (!isset($_SESSION['id'])) {
             <div class="section-header text-start mb-3">
               <div class="label">🤝 Tentang Kami</div>
             </div>
-            <h2>Cara Kerja<br>Travel Agency Kami</h2>
+            <h2>Cara Kerja<br class="d-none d-md-inline"> Travel Agency Kami</h2>
             <p>Kami adalah agen perjalanan yang berkomitmen untuk memberikan pengalaman perjalanan terbaik. Dengan tim profesional yang berdedikasi, kami merancang setiap perjalanan agar sesuai dengan kebutuhan Anda, mulai dari pemesanan akomodasi, tiket perjalanan, hingga panduan wisata.</p>
             <p>Kami hadir untuk memastikan Anda menikmati perjalanan yang nyaman, aman, dan penuh kenangan indah.</p>
             <a href="about.php">

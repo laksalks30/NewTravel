@@ -29,11 +29,21 @@
     --radius-sm: 8px;
 }
 
+html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     color: var(--text);
     background: var(--bg);
     line-height: 1.6;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
 }
 
 /* ===========================
@@ -124,21 +134,26 @@ body {
 =========================== */
 .home {
     width: 100%;
+    max-width: 100%;
     min-height: 92vh;
-    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.35) 100%),
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.4) 100%),
                       url('./images/home\ indo.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    touch-action: pan-y;
 }
 
 .home .content {
     text-align: center;
     padding: 40px 20px;
     max-width: 750px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .home .content .badge-hero {
@@ -175,6 +190,7 @@ body {
     margin-bottom: 16px;
     letter-spacing: -1px;
     text-shadow: 0 3px 10px rgba(0, 0, 0, 0.65);
+    word-break: break-word;
 }
 
 .changecontent::after {
@@ -196,9 +212,18 @@ body {
     color: rgba(255, 255, 255, 0.92);
     font-size: 16px;
     font-weight: 400;
-    margin-bottom: 36px;
+    margin-bottom: 32px;
     line-height: 1.7;
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+.hero-btn-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
 }
 
 .home .content .btn-hero {
@@ -214,7 +239,7 @@ body {
     text-decoration: none;
     transition: all 0.3s ease;
     box-shadow: 0 8px 30px rgba(255,165,0,0.5);
-    margin: 0 8px;
+    margin: 0;
 }
 
 .home .content .btn-hero:hover {
@@ -244,7 +269,7 @@ body {
     display: flex;
     justify-content: center;
     gap: 40px;
-    margin-top: 50px;
+    margin-top: 40px;
     flex-wrap: wrap;
 }
 
@@ -269,10 +294,80 @@ body {
 }
 
 @media (max-width: 768px) {
-    .home .content h1 { font-size: 38px; }
-    .home .content p { font-size: 14px; }
-    .home .stats-bar { gap: 24px; }
-    .home .stats-bar .stat h3 { font-size: 22px; }
+    .home {
+        min-height: calc(100vh - 65px);
+        padding: 40px 0 30px 0;
+    }
+    .home .content {
+        padding: 24px 16px;
+    }
+    .home .content h1 { 
+        font-size: 34px; 
+        line-height: 1.2;
+        margin-bottom: 14px;
+        word-break: break-word;
+    }
+    .home .content p { 
+        font-size: 14px; 
+        line-height: 1.6;
+        margin-bottom: 24px;
+    }
+    .hero-btn-group {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        max-width: 290px;
+        margin: 0 auto 16px auto;
+    }
+    .hero-btn-group .btn-hero {
+        width: 100%;
+        justify-content: center;
+        padding: 13px 20px;
+        font-size: 14.5px;
+        margin: 0;
+        box-shadow: 0 4px 15px rgba(255,165,0,0.35);
+    }
+    .home .stats-bar { 
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px 20px;
+        max-width: 320px;
+        margin: 24px auto 0 auto;
+    }
+    .home .stats-bar .stat h3 { 
+        font-size: 22px; 
+    }
+    .home .stats-bar .stat p {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .home .content h1 { 
+        font-size: 28px; 
+    }
+    .home .content h5 {
+        font-size: 15px;
+    }
+    .home .content .badge-hero {
+        font-size: 11px;
+        padding: 5px 14px;
+        margin-bottom: 12px;
+    }
+    .hero-btn-group {
+        max-width: 260px;
+    }
+    .hero-btn-group .btn-hero {
+        padding: 12px 18px;
+        font-size: 13.5px;
+    }
+    .home .stats-bar {
+        max-width: 270px;
+        gap: 12px 14px;
+    }
+    .home .stats-bar .stat h3 {
+        font-size: 20px;
+    }
 }
 
 /* ===========================
@@ -600,6 +695,40 @@ body {
     box-shadow: 0 10px 30px rgba(255,165,0,0.45);
 }
 
+@media (max-width: 768px) {
+    .about {
+        padding: 50px 0;
+        overflow: hidden;
+    }
+    .about .about-img img {
+        height: 220px;
+    }
+    .about .about-content {
+        padding: 16px 4px 0 4px;
+        text-align: center;
+    }
+    .about .about-content .section-header {
+        text-align: center !important;
+        margin-bottom: 12px;
+    }
+    .about .about-content h2 {
+        font-size: 24px;
+        line-height: 1.3;
+        margin-bottom: 14px;
+    }
+    .about .about-content p {
+        font-size: 13.5px;
+        line-height: 1.7;
+        margin-bottom: 14px;
+    }
+    #about-btn {
+        width: 100%;
+        max-width: 200px;
+        justify-content: center;
+        margin: 6px auto 0;
+    }
+}
+
 /* ===========================
    FOOTER
 =========================== */
@@ -903,6 +1032,26 @@ body {
     color: var(--text-muted);
     margin: 0;
     line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .about-page-section {
+        padding: 50px 0;
+        overflow: hidden;
+    }
+    .about-card-img-wrap img {
+        height: 260px;
+    }
+    .feature-pill-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .page-hero {
+        padding: 45px 0 35px;
+    }
+    .page-hero h1 {
+        font-size: 28px;
+    }
 }
 
 /* Visi & Misi Cards */
