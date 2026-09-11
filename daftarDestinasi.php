@@ -4,7 +4,7 @@ include "config_security.php";
 
 $loggedIn = isset($_SESSION['id']);
 
-$query = "SELECT id_destinasi, nama_destinasi, deskripsi_destinasi, harga_destinasi, kota_destinasi, kategori_destinasi FROM destinasi";
+$query = "SELECT id_destinasi, nama_destinasi, deskripsi_destinasi, harga_destinasi, gambar_destinasi, kota_destinasi, kategori_destinasi FROM destinasi";
 $result = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
@@ -18,6 +18,22 @@ $result = mysqli_query($conn, $query);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=3">
+    <script>
+    function toggleNavMenu(e) {
+        if (e) {
+            if (typeof e.preventDefault === 'function') e.preventDefault();
+            if (typeof e.stopPropagation === 'function') e.stopPropagation();
+        }
+        var m = document.getElementById('mynavbar') || document.querySelector('.navbar-collapse');
+        if (m) m.classList.toggle('show');
+    }
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('#navbar')) {
+            var m = document.querySelector('.navbar-collapse.show');
+            if (m) m.classList.remove('show');
+        }
+    });
+    </script>
     <script src="navbar.js?v=2"></script>
     <style>
         .page-hero {
@@ -234,11 +250,13 @@ $result = mysqli_query($conn, $query);
 
             <?php if ($total > 0): ?>
                 <div class="row g-4" id="destGrid">
-                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                    <?php while ($row = mysqli_fetch_assoc($result)): 
+                        $imageSrc = !empty($row['gambar_destinasi']) ? 'data:image/jpeg;base64,' . base64_encode($row['gambar_destinasi']) : 'images/travel indo.jpg';
+                    ?>
                         <div class="col-md-4 dest-item">
                             <div class="dest-card">
                                 <div class="img-wrap">
-                                    <img src="get_image.php?id=<?= $row['id_destinasi'] ?>" alt="<?= htmlspecialchars($row['nama_destinasi']) ?>" loading="lazy">
+                                    <img src="<?= $imageSrc ?>" alt="<?= htmlspecialchars($row['nama_destinasi']) ?>">
                                     <?php if ($row['kategori_destinasi']): ?>
                                         <span class="tag"><?= htmlspecialchars($row['kategori_destinasi']) ?></span>
                                     <?php endif; ?>
