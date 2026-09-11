@@ -283,10 +283,6 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_type']) && $_SESSION['user_t
             </button>
         </form>
 
-        <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 10px 14px; margin-top: 18px; font-size: 12px; color: #64748b; text-align: center;">
-            <i class="fas fa-info-circle text-warning me-1"></i> Akun Admin: Username <b>admin</b> &bull; Password <b>admin</b>
-        </div>
-
         <div class="back-to-home">
             <a href="index.php">
                 <i class="fas fa-arrow-left me-1"></i> Kembali ke Halaman Utama
