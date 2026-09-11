@@ -20,20 +20,42 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_type']) && $_SESSION['user_t
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Poppins', sans-serif;
             position: relative;
-            overflow-x: hidden;
-            padding: 20px;
+            padding: 24px 16px;
         }
 
-        body::before {
-            content: '';
+        .bg-decor-wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-decor-circle-1 {
             position: absolute;
             width: 500px;
             height: 500px;
@@ -43,8 +65,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_type']) && $_SESSION['user_t
             right: -150px;
         }
 
-        body::after {
-            content: '';
+        .bg-decor-circle-2 {
             position: absolute;
             width: 350px;
             height: 350px;
@@ -63,6 +84,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_type']) && $_SESSION['user_t
             padding: 40px 35px;
             position: relative;
             z-index: 2;
+            margin: auto;
         }
 
         .admin-header {
@@ -74,8 +96,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_type']) && $_SESSION['user_t
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: var(--primary-light);
-            color: var(--primary);
+            background: var(--primary-light, #fff3d6);
+            color: var(--primary, #ffa500);
             font-size: 12px;
             font-weight: 700;
             padding: 5px 16px;
@@ -88,47 +110,47 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_type']) && $_SESSION['user_t
         .admin-header h3 {
             font-size: 26px;
             font-weight: 800;
-            color: var(--secondary);
+            color: var(--secondary, #1a1a2e);
             margin-bottom: 6px;
         }
 
         .admin-header p {
             font-size: 13px;
-            color: var(--text-muted);
+            color: var(--text-muted, #777);
             margin: 0;
         }
 
         .form-label {
             font-size: 13px;
             font-weight: 600;
-            color: var(--secondary);
+            color: var(--secondary, #1a1a2e);
             margin-bottom: 6px;
         }
 
         .input-group-text {
-            background: var(--bg-soft);
-            border-color: var(--border);
+            background: var(--bg-soft, #f8f9fc);
+            border-color: var(--border, #e8ecf0);
             color: #888;
             border-radius: 12px 0 0 12px;
         }
 
         .form-control {
-            border-color: var(--border);
+            border-color: var(--border, #e8ecf0);
             padding: 11px 14px;
             font-size: 14px;
             border-radius: 0 12px 12px 0;
-            background: var(--bg-soft);
+            background: var(--bg-soft, #f8f9fc);
             transition: all 0.3s;
         }
 
         .form-control:focus {
             background: white;
-            border-color: var(--primary);
+            border-color: var(--primary, #ffa500);
             box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.15);
         }
 
         .btn-admin-login {
-            background: var(--primary);
+            background: var(--primary, #ffa500);
             color: white;
             font-weight: 700;
             font-size: 15px;
@@ -142,10 +164,11 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_type']) && $_SESSION['user_t
             align-items: center;
             justify-content: center;
             gap: 8px;
+            cursor: pointer;
         }
 
         .btn-admin-login:hover {
-            background: var(--primary-dark);
+            background: var(--primary-dark, #e09400);
             transform: translateY(-2px);
             box-shadow: 0 12px 30px rgba(255, 165, 0, 0.45);
             color: white;
@@ -158,18 +181,56 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_type']) && $_SESSION['user_t
         }
 
         .back-to-home a {
-            color: var(--text-muted);
+            color: var(--text-muted, #777);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s;
         }
 
         .back-to-home a:hover {
-            color: var(--primary);
+            color: var(--primary, #ffa500);
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 20px 12px;
+            }
+            .admin-login-card {
+                padding: 28px 18px;
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            }
+            .admin-header {
+                margin-bottom: 20px;
+            }
+            .admin-header h3 {
+                font-size: 22px;
+            }
+            .admin-header p {
+                font-size: 12px;
+            }
+            .bg-decor-circle-1 {
+                width: 260px;
+                height: 260px;
+                top: -60px;
+                right: -60px;
+            }
+            .bg-decor-circle-2 {
+                width: 180px;
+                height: 180px;
+                bottom: -40px;
+                left: -40px;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- Background Decor Clip (Overflow-Safe) -->
+    <div class="bg-decor-wrap" aria-hidden="true">
+        <div class="bg-decor-circle-1"></div>
+        <div class="bg-decor-circle-2"></div>
+    </div>
 
     <div class="admin-login-card">
         <div class="admin-header">
